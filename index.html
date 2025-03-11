@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            max-width: 100%;
+        }
+
+        body {
+            background-color: #000;
+            color:antiquewhite;
+        }
+
+        #layout {
+            margin: auto;
+            width: 100%;
+            padding: 0px;
+        }
+
+        #options {
+            vertical-align: middle;
+            flex: 30%;
+        }
+
+        .flexcontainer {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .option-image {
+            position: absolute;
+            height: auto;
+            max-width: 100%;
+        }
+
+        .opt {
+            height: 32px;
+            vertical-align: middle;
+        }
+
+        .icon {
+            max-height: 32px;
+            height: auto;
+            width: auto;
+            padding-right: 10px;
+        }
+
+        select {
+            appearance: none;
+            outline: none;
+            cursor: pointer;
+
+            color: antiquewhite;
+            background-color: #000;
+            border-radius: 0px;
+            /* round the border corners */
+            padding: 5px 5px;
+            width: 300px;
+            height: 32px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: medium;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        select {
+            border: none;
+        }
+
+        #preview {
+            flex: 90%;
+            width: auto;
+            height: auto;
+        }
+        #previewbackground {
+            background-color: black;
+            z-index: -1;
+        }
+        #addon {
+            display: none;
+        }
+        /*
+        #limbs {
+            z-index: 10;
+        }
+        #toso {
+            z-index: 20;
+        }
+        #helmet {
+            z-index: 30;
+        }
+        #armor {
+            z-index: 40;
+        }
+        */
+        #link {
+            font-size: medium;
+            width: 300px;
+            text-wrap: balance;
+        }
+
+        .opt {
+            clear: both;
+            display: table;
+            white-space: nowrap;
+            width: 300px;
+        }
+        #misc {
+            width: 300px;   
+        }
+        .opt select {
+            /* transform: translateY(-50%); */
+        }
+        /* for larger screens */
+        @media screen and (min-width: 900px) {
+            .flexcontainer {
+                display: flex;
+                flex-direction: row;
+                height: 95vh;
+            }
+            .icon {
+                max-height: 64px;
+                height: auto;
+                width: auto;
+                display:inline;
+                padding-right: 20px;
+            }
+            select {
+                appearance: none;
+                outline: none;
+                cursor: pointer;
+
+                color: antiquewhite;
+                background-color: #000;
+                border-radius: 0px;
+                /* round the border corners */
+                padding: 5px 10px;
+                width: 300px;
+                height: 50px;
+                box-shadow: 5px 8px 5px rgba(0, 0, 0, 0.8);
+
+                font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+                font-size: 24px;
+                font-weight: bold;
+                text-align: left;
+            }
+            #layout {
+                margin: auto;
+                width: 90%;
+                padding: 10px;
+            }
+            .option-image {
+                position: absolute;
+                max-height: 100%;
+                width: auto;
+            }
+        }
+
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            //generic querystring parse function
+            function GetParameterValues(param) {
+                var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                for (var i = 0; i < url.length; i++) {
+                    var urlparam = url[i].split('=');
+                    if (urlparam[0] == param) {
+                        return urlparam[1];
+                    }
+                }
+            }
+
+            //Get specific values from querystring
+            var helm = GetParameterValues('select-helmet');
+            var torso = GetParameterValues('select-torso');
+            var limbs = GetParameterValues('select-limbs');
+            var armor = GetParameterValues('select-armor');
+
+
+            //alert("Helm " + helm + " your torso is " + torso); 
+
+            //Go through dropdowns and select
+            $("#select-helmet option[value='" + helm + "']").attr('selected', 'selected');
+            $("#select-torso option[value='" + torso + "']").attr('selected', 'selected');
+            $("#select-limbs option[value='" + limbs + "']").attr('selected', 'selected');
+            $("#select-armor option[value='" + armor + "']").attr('selected', 'selected');
+        });  
+    </script>
+    <script>
+        $(document).ready(function () {
+            //helmet changer
+            $("#select-helmet").change(function () {
+                $("#helmet").attr("src", 'images/' + $(":selected", this).data('img'))
+            }).change();
+            //torso changer
+            $("#select-torso").change(function () {
+                $("#torso").attr("src", 'images/' + $(":selected", this).data('img'))
+            }).change();
+            //limbs changer
+            $("#select-limbs").change(function () {
+                $("#limbs").attr("src", 'images/' + $(":selected", this).data('img'))
+            }).change();
+            //armor changer
+            $("#select-armor").change(function () {
+                $("#armor").attr("src", 'images/' + $(":selected", this).data('img'))
+            }).change();
+            //randomize
+            $("#button-random").click(function () {
+                var selhelmet = document.getElementById('select-helmet');
+                var seltorso = document.getElementById('select-torso');
+                var sellimbs = document.getElementById('select-limbs');
+                var selarmor = document.getElementById('select-armor');
+
+                //helmet
+                var items = selhelmet.getElementsByTagName('option');
+                var index = Math.floor(Math.random() * (items.length -1));
+                selhelmet.selectedIndex = index + 1;
+                $("#select-helmet").trigger('change');
+                //torso
+                var items = seltorso.getElementsByTagName('option');
+                var index = Math.floor(Math.random() * (items.length -1));
+                seltorso.selectedIndex = index + 1;
+                $("#select-torso").trigger('change');
+                //limbs
+                var items = sellimbs.getElementsByTagName('option');
+                var index = Math.floor(Math.random() * (items.length -1));
+                sellimbs.selectedIndex = index + 1;
+                $("#select-limbs").trigger('change');
+                //armor
+                var items = selarmor.getElementsByTagName('option');
+                var index = Math.floor(Math.random() * (items.length -1));
+                selarmor.selectedIndex = index + 1;
+                $("#select-armor").trigger('change');
+            });
+            //display a shareable link
+            $("#button-share").click(function () {
+                var helm = $('#select-helmet :selected').val();
+                var torso = $('#select-torso :selected').val();
+                var limbs = $('#select-limbs :selected').val();
+                var armor = $('#select-armor :selected').val();
+                var obj = {};
+                obj['select-helmet'] = helm;
+                obj['select-torso'] = torso;
+                obj['select-limbs'] = limbs;
+                obj['select-armor'] = armor;
+                var url = "https://armoryplaything.onrender.com/index.html?" + $.param(obj);
+
+                $("#link").text(url);
+
+            });
+            //reset
+            $("#button-reset").click(function () {
+                $("#select-helmet").val("blank").trigger('change');
+                $("#select-torso").val("blank").trigger('change');
+                $("#select-limbs").val("blank").trigger('change');
+                $("#select-armor").val("blank").trigger('change');
+                $("#link").text('');
+            })
+            //Add-on Barbarian Limbs
+            $("#button-bare").click(function (){
+                $("#addon").toggle();
+            })
+        });
+    </script>
+
+
+</head>
+
+<body>
+    <div id="layout" class="flexcontainer">
+        <div id="options">
+                <div class="opt"><img src="images/icon-helmet.png" alt="Helmet" class="icon" />
+                    <select name="select-helmet" id="select-helmet" class="selector">
+                        <option value="blank" data-img="blank.png">Choose a helmet</option>
+                        <option value="dwarf-horns-red" data-img="head-dwarf-horns-red.png">Horned Dwarf (red)</option>
+                        <option value="dwarf-horns-green" data-img="head-dwarf-horns-green.png">Horned Dwarf (green)</option>
+                        <option value="dwarf-horns-gunmetal" data-img="head-dwarf-horns-gunmetal.png">Horned Dwarf (gunmetal)</option>
+                        <option value="dwarf-horns-purple" data-img="head-dwarf-horns-purple.png">Horned Dwarf (purple)</option>
+                        <option value="dwarf-wings-red" data-img="head-dwarf-wings-red.png">Winged Dwarf (red)</option>
+                        <option value="dwarf-wings-green" data-img="head-dwarf-wings-green.png">Winged Dwarf (green)</option>
+                        <option value="dwarf-wings-gunmetal" data-img="head-dwarf-wings-gunmetal.png">Winged Dwarf (gunmetal)</option>
+                        <option value="dwarf-wings-purple" data-img="head-dwarf-wings-purple.png">Winged Dwarf (purple)</option>
+                        <option value="gladiator-red" data-img="head-gladiator-red.png">Gladiator (red)</option>
+                        <option value="gladiator-green" data-img="head-gladiator-green.png">Gladiator (green)</option>
+                        <option value="gladiator-gunmetal" data-img="head-gladiator-gunmetal.png">Gladiator (gunmetal)</option>
+                        <option value="gladiator-purple" data-img="head-gladiator-purple.png">Gladiator (purple)</option>
+                        <option value="goblin-helmet-red" data-img="head-goblin-helmet-red.png">Helmed Goblin (red)</option>
+                        <option value="goblin-helmet-green" data-img="head-goblin-helmet-green.png">Helmed Goblin (green)</option>
+                        <option value="goblin-helmet-gunmetal" data-img="head-goblin-helmet-gunmetal.png">Helmed Goblin (gunmetal)</option>
+                        <option value="goblin-helmet-purple" data-img="head-goblin-helmet-purple.png">Helmed Goblin (purple)</option>
+                        <option value="goblin-hood-red" data-img="head-goblin-hood-red.png">Hooded Goblin (red)</option>
+                        <option value="goblin-hood-green" data-img="head-goblin-hood-green.png">Hooded Goblin (green)</option>
+                        <option value="goblin-hood-gunmetal" data-img="head-goblin-hood-gunmetal.png">Hooded Goblin (gunmetal)</option>
+                        <option value="goblin-hood-purple" data-img="head-goblin-hood-purple.png">Hooded Goblin (purple)</option>
+                        <option value="swigg" data-img="head-swigg.png">Swigg (not included)</option>
+                    </select>
+                </div>
+                <div class="opt"><img src="images/icons-torso.png" alt="Torso" class="icon" />
+                    <select name="select-torso" id="select-torso" class="selector">
+                        <option value="blank" data-img="blank.png">Choose a torso</option>
+                        <option value="cloth-red" data-img="torso-cloth-red.png">Cloth (red)</option>
+                        <option value="cloth-green" data-img="torso-cloth-green.png">Cloth (green)</option>
+                        <option value="cloth-gunmetal" data-img="torso-cloth-gunmetal.png">Cloth (gunmetal)</option>
+                        <option value="cloth-purple" data-img="torso-cloth-purple.png">Cloth (purple)</option>
+                        <option value="leather-red" data-img="torso-leather-red.png">Leather (red)</option>
+                        <option value="leather-green" data-img="torso-leather-green.png">Leather (green)</option>
+                        <option value="leather-gunmetal" data-img="torso-leather-gunmetal.png">Leather (gunmetal)</option>
+                        <option value="leather-purple" data-img="torso-leather-purple.png">Leather (purple)</option>
+                        <option value="scale-red" data-img="torso-scale-red.png">Scale (red)</option>
+                        <option value="scale-green" data-img="torso-scale-green.png">Scale (green)</option>
+                        <option value="scale-gunmetal" data-img="torso-scale-gunmetal.png">Scale (gunmetal)</option>
+                        <option value="scale-purple" data-img="torso-scale-purple.png">Scale (purple)</option>
+                        <option value="valiant-red" data-img="torso-valiant-red.png">Valiant (red)</option>
+                        <option value="valiant-green" data-img="torso-valiant-green.png">Valiant (green)</option>
+                        <option value="valiant-gunmetal" data-img="torso-valiant-gunmetal.png">Valiant (gunmetal)</option>
+                        <option value="valiant-purple" data-img="torso-valiant-purple.png">Valiant (purple)</option>
+                    </select>
+                </div>
+                <div class="opt"><img src="images/icons-limbs.png" alt="Limbs" class="icon" />
+                    <select name="select-limbs" id="select-limbs" class="selector">
+                        <option value="blank" data-img="blank.png">Choose a set of limbs</option>
+                        <option value="basic-red" data-img="limbs-basic-red.png">Basic (red)</option>
+                        <option value="basic-green" data-img="limbs-basic-green.png">Basic (green)</option>
+                        <option value="basic-gunmetal" data-img="limbs-basic-gunmetal.png">Basic (gunmetal)</option>
+                        <option value="basic-purple" data-img="limbs-basic-purple.png">Basic (purple)</option>
+                        <option value="exile-red" data-img="limbs-exile-red.png">Exile (red)</option>
+                        <option value="exile-green" data-img="limbs-exile-green.png">Exile (green)</option>
+                        <option value="exile-gunmetal" data-img="limbs-exile-gunmetal.png">Exile (gunmetal)</option>
+                        <option value="exile-purple" data-img="limbs-exile-purple.png">Exile (purple)</option>
+                        <option value="monk-red" data-img="limbs-monk-red.png">Monk (red)</option>
+                        <option value="monk-green" data-img="limbs-monk-green.png">Monk (green)</option>
+                        <option value="monk-gunmetal" data-img="limbs-monk-gunmetal.png">Monk (gunmetal)</option>
+                        <option value="monk-purple" data-img="limbs-monk-purple.png">Monk (purple)</option>
+                    </select>
+                </div>
+                <div class="opt"><img src="images/icons-armor.png" alt="Armor" class="icon" />
+                    <select name="select-armor" id="select-armor" class="selector">
+                        <option value="blank" data-img="blank.png">Choose an armor set</option>
+                        <option value="impure-red" data-img="armor-impure-red.png">Impure (red)</option>
+                        <option value="impure-green" data-img="armor-impure-green.png">Impure (green)</option>
+                        <option value="impure-gunmetal" data-img="armor-impure-gunmetal.png">Impure (gunmetal)</option>
+                        <option value="impure-purple" data-img="armor-impure-purple.png">Impure (purple)</option>
+                        <option value="exile-red" data-img="armor-exile-red.png">Exile (red)</option>
+                        <option value="exile-green" data-img="armor-exile-green.png">Exile (green)</option>
+                        <option value="exile-gunmetal" data-img="armor-exile-gunmetal.png">Exile (gunmetal)</option>
+                        <option value="exile-purple" data-img="armor-exile-purple.png">Exile (purple)</option>
+                        <option value="rounded-red" data-img="armor-rounded-red.png">Rounded (red)</option>
+                        <option value="rounded-green" data-img="armor-rounded-green.png">Rounded (green)</option>
+                        <option value="rounded-gunmetal" data-img="armor-rounded-gunmetal.png">Rounded (gunmetal)</option>
+                        <option value="rounded-purple" data-img="armor-rounded-purple.png">Rounded (purple) +</option>
+                        <option value="sir-red" data-img="armor-sir-red.png">Sir (red)</option>
+                        <option value="sir-green" data-img="armor-sir-green.png">Sir (green)</option>
+                        <option value="sir-gunmetal" data-img="armor-sir-gunmetal.png">Sir (gunmetal)</option>
+                        <option value="sir-purple" data-img="armor-sir-purple.png">Sir (purple)</option>
+                    </select>
+                </div>
+                <div id="misc" class="opt">
+                    <img src="images/icons-random.png" class="icon" id="button-random" alt="Randomize" />
+                    <img src="images/icons-reset.png" class="icon" id="button-reset" alt="Reset" />
+                    <!-- <img src="images/icons-share.png" class="icon" id="button-share" alt="Share" /> -->
+                    <!-- <img src="images/icons-bare.png" class="icon" id="button-bare" alt="Bare Option" /> -->
+                    <div><span id="link"></span></div>
+                </div>
+        </div>
+        <div id="preview">
+            <img src="images/blank.png" id="limbs" class="option-image" />
+            <img src="images/limbs-bare.png" id="addon" class="option-image" id="addon" />
+            <img src="images/blank.png" id="torso" class="option-image" />
+            <img src="images/blank.png" id="armor" class="option-image" />
+            <img src="images/blank.png" id="helmet" class="option-image" />
+
+            <img src="images/blank.png" id="previewbackground" class="option-image" />
+        </div>
+    </div>
+</body>
+
+</html>
