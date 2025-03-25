@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script src="https://kit.fontawesome.com/dded2534a3.js" crossorigin="anonymous"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            max-width: 100%;
+        }
+
+        body {
+            background-color: #000;
+            color:antiquewhite;
+        }
+
+        .layout {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .layout video {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+
+    </style>
+
+</head>
+
+<body>
+    <div class="layout">
+        <video height="540" autoplay="true" loop="true" muted="true">
+            <source src="images/knubbed.mp4" type="video/mp4">
+            <!-- If no video, show gif -->
+            <img src="images/knubbed.gif" />
+        </video>
+    </div>
+</body>
+
+</html>
