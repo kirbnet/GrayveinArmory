@@ -10,6 +10,8 @@
     <style>
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         html {
@@ -35,6 +37,13 @@
             width: 100%;
             height: 100%;
         }
+        .layout img {
+            position: relative;
+            max-width: 100vw;
+            max-height: 100vh;
+            height: 100%;
+            width: 100%;
+        }
 
 
     </style>
@@ -45,7 +54,6 @@
     <div class="layout">
         <video height="540" autoplay="true" loop="true" muted="true">
             <source src="images/knubbed.mp4" type="video/mp4">
-            <!-- If no video, show gif -->
             <img src="images/knubbed.gif" />
         </video>
     </div>
